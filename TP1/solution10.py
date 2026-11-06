@@ -1,54 +1,46 @@
-# (a)
+# ---------------------------------------------------------------------------
+# Problem 10 (Hard) · Prime numbers and Goldbach's conjecture
+# ---------------------------------------------------------------------------
 def is_prime(n):
+    """True when n is a prime number. Tests divisors up to the square root."""
     if n < 2:
         return False
-
     d = 2
     while d * d <= n:
         if n % d == 0:
             return False
         d += 1
-
     return True
 
 
-# (b)
-print("Primes below 50:")
-
+print("\nPrimes below 50:", end=" ")
 count = 0
-
-for n in range(2, 50):
+for n in range(50):
     if is_prime(n):
         print(n, end=" ")
-
-print()
-
-for n in range(2, 100):
+for n in range(100):
     if is_prime(n):
         count += 1
+print("\nNumber of primes below 100:", count)
 
-print("Number of primes below 100:", count)
 
-
-# (c)
 def goldbach(n):
-    for p in range(2, n):
-        for q in range(2, n):
-            if is_prime(p) and is_prime(q) and p + q == n:
-                return p, q
+    """Return the first pair of primes (p, q) with p + q == n, or None."""
+    for p in range(2, n // 2 + 1):
+        if is_prime(p) and is_prime(n - p):
+            return p, n - p
+    return None
 
 
 for n in range(4, 31, 2):
     p, q = goldbach(n)
     print(f"{n} = {p} + {q}")
 
-
-# (d)
-holds = True
-
+# Check the conjecture for every even number from 4 to 10 000
+all_ok = True
 for n in range(4, 10001, 2):
     if goldbach(n) is None:
-        holds = False
+        all_ok = False
+        print("Counter-example:", n)
         break
-
-print("Goldbach holds for every even number from 4 to 10000:", holds)
+print("Goldbach holds for every even number from 4 to 10000:", all_ok)
